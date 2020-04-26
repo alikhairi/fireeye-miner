@@ -49,6 +49,7 @@ class Miner(BasePollerFT):
         response = conn.getresponse()
         data = json.loads(response.read())
         conn.close()
+        pass
         
     def _process_item(self, item):
         indicators = 'ip,sha256,url,domain'
