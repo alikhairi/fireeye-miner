@@ -31,7 +31,8 @@ class Miner(BasePollerFT):
     def _build_iterator(self, now):
         start = int(time.time()) - (86400 * self.numdays)
         end = int(time.time())
-        search_query = '/view/iocs?startDate=' + str(start) + '&endDate=' + str(end) + '&indicatorTypes=' + self.indicators
+        indicators = 'ip,sha256,url,domain'
+        search_query = '/view/iocs?startDate=' + str(start) + '&endDate=' + str(end) + '&indicatorTypes=' + indicators
         accept_version = '2.2'
         accept_header = 'application/json'
         time_stamp = email.Utils.formatdate(localtime=True)
@@ -52,7 +53,8 @@ class Miner(BasePollerFT):
         return data["message"]
         
     def _process_item(self, item):
-        indicators = self.indicators.split(',')
+        indicators = 'ip,sha256,url,domain'
+        indicators = indicators.split(',')
         for indicator in indicators:
             for x in item:
                 if x[indicator]:
@@ -60,4 +62,4 @@ class Miner(BasePollerFT):
                         value = {'type': 'IPv4', 'confidence': 100}
                     else:
                         value = {'type': indicator, 'confidence': 100}
-                    return [x[indicator], value]
+                    return [[x[indicator], value]]
