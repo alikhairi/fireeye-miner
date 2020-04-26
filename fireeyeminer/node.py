@@ -27,7 +27,7 @@ class Miner(BasePollerFT):
             raise ValueError('%s - # of Days is required' % self.name)
         self.url = 'https://api.isightpartners.com'
 
-    def _build_iterator(self, item):
+    def _build_iterator(self, now):
         start = int(time.time()) - (86400 * self.numdays)
         end = int(time.time())
         indicators = 'ip,sha256,url,domain'
