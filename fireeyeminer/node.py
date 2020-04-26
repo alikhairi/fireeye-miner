@@ -60,4 +60,4 @@ class Miner(BasePollerFT):
                         value = {'type': 'IPv4', 'confidence': 100}
                     else:
                         value = {'type': indicator, 'confidence': 100}
-                    return [[x[indicator], value]]
+                    return [x[indicator], value]
