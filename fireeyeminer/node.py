@@ -30,6 +30,7 @@ class Miner(BasePollerFT):
     def _build_iterator(self, item):
         start = int(time.time()) - (86400 * self.numdays)
         end = int(time.time())
+        indicators = 'ip,sha256,url,domain'
         search_query = '/view/iocs?startDate=' + str(start) + '&endDate=' + str(end) + '&indicatorTypes=' + indicators
         accept_version = '2.2'
         accept_header = 'application/json'
