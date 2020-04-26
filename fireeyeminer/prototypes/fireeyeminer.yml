@@ -1,9 +1,9 @@
-url: api.isightpartners.com
+url: https://github.com/alikhairi/fireeye-miner
 description: >
   Fireeye iSight extension for MineMeld.
 
 prototypes:
-  isightMiner:
+  Miner:
     author: Mohamad Ali Khairi
     class: fireeyeminer.Miner
     development_status: EXPERIMENTAL
