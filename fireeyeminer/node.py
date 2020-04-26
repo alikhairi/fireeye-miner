@@ -50,12 +50,12 @@ class Miner(BasePollerFT):
         data = json.loads(response.read())
         conn.close()
         
-    def _process_item(self, data):
+    def _process_item(self, item):
         indicators = 'ip,sha256,url,domain'
         indicators = indicators.split(',')
         # iocs = []
         for indicator in indicators:
-            for message in data['message']:
+            for message in item['message']:
                 if message[indicator]:
                     if indicator == 'ip':
                         value = {'type': 'IPv4', 'confidence': 100}
