@@ -2,7 +2,7 @@
     "version": "0.1",
     "name": "fireeye-miner",
     "author": "Mohamad Ali Khairi",
-    "author_email": "alikhairi@petronas.com",
+    "author_email": "alikhairi@outlook.com",
     "description": "MineMeld node extension for mining IOCs from Fireeye iSight",
     "url": "https://github.com/alikhairi/fireeye-miner",
     "entry_points": {
