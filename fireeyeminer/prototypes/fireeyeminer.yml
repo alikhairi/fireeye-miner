@@ -9,10 +9,10 @@ prototypes:
     development_status: EXPERIMENTAL
     node_type: miner
     indicator_types:
-      - IP
+      - IPv4
       - URL
-      - DOMAIN
-      - SHA256
+      - domain
+      - sha256
     tags:
       - extension
       - fireeyeminer
