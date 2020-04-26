@@ -3,16 +3,16 @@ description: >
   Fireeye iSight extension for MineMeld.
 
 prototypes:
-  Miner:
+  isight:
     author: Mohamad Ali Khairi
     class: fireeyeminer.Miner
     development_status: EXPERIMENTAL
     node_type: miner
     indicator_types:
-      - ip
-      - url
-      - domain
-      - sha256
+      - IP
+      - URL
+      - DOMAIN
+      - SHA256
     tags:
       - extension
       - fireeyeminer
@@ -33,4 +33,3 @@ prototypes:
       # flag indicators with share level green
       attributes:
         share_level: green
-        confidence : 100
