@@ -28,7 +28,6 @@ class Miner(BasePollerFT):
         self.url = 'https://api.isightpartners.com'
 
     def _build_iterator(self, item):
-        indicators = 'ip,sha256,url,domain'
         start = int(time.time()) - (86400 * self.numdays)
         end = int(time.time())
         search_query = '/view/iocs?startDate=' + str(start) + '&endDate=' + str(end) + '&indicatorTypes=' + indicators
@@ -49,6 +48,9 @@ class Miner(BasePollerFT):
         response = conn.getresponse()
         data = json.loads(response.read())
         conn.close()
+        
+    def _process_item(self, data):
+        indicators = 'ip,sha256,url,domain'
         indicators = indicators.split(',')
         iocs = []
         for indicator in indicators:
@@ -60,6 +62,3 @@ class Miner(BasePollerFT):
                         value = {'type': indicator, 'confidence': 100}
                     iocs.append([str(message[indicator]), value])
         return iocs
-    
-    def _process_item(self, item):
-        return item
