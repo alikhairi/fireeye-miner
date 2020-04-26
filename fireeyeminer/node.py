@@ -52,7 +52,7 @@ class Miner(BasePollerFT):
     def _process_item(self, data):
         indicators = 'ip,sha256,url,domain'
         indicators = indicators.split(',')
-        iocs = []
+        # iocs = []
         for indicator in indicators:
             for message in data['message']:
                 if message[indicator]:
@@ -60,5 +60,5 @@ class Miner(BasePollerFT):
                         value = {'type': 'IPv4', 'confidence': 100}
                     else:
                         value = {'type': indicator, 'confidence': 100}
-                    iocs.append([str(message[indicator]), value])
-        return iocs
+                    #iocs.append([str(message[indicator]), value])
+                    return [[indicator, value]]
