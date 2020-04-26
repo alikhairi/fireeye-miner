@@ -53,7 +53,10 @@ class Miner(BasePollerFT):
         for indicator in indicators:
             for message in data['message']:
                 if message[indicator]:
-                    value = {'type': indicator, 'confidence': 100}
+                    if indicator == 'ip':
+                        value = {'type': 'IPv4', 'confidence': 100}
+                    else:
+                        value = {'type': indicator, 'confidence': 100}
                     return [[str(message[indicator]), value]]
 
     def _process_item(self, item):
