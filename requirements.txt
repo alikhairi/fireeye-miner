@@ -1,7 +1,6 @@
 minemeld-core>=0.9.31b2
 beautifulsoup4
 requests
-hashlib
 hmac
 httplib
 email
