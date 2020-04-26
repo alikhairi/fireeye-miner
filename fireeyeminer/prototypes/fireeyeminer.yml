@@ -1,6 +1,5 @@
 url: https://github.com/alikhairi/fireeye-miner
-description: >
-  Fireeye iSight extension for MineMeld.
+description: Fireeye iSight extension for MineMeld.
 
 prototypes:
   isight:
