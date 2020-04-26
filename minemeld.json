@@ -1,0 +1,17 @@
+{
+    "version": "0.1",
+    "name": "fireeye-miner",
+    "author": "Mohamad Ali Khairi",
+    "author_email": "alikhairi@petronas.com",
+    "description": "MineMeld node extension for mining IOCs from Fireeye iSight",
+    "url": "https://github.com/alikhairi/fireeye-miner",
+    "entry_points": {
+        "minemeld_nodes": {
+            "fireeyeminer.Miner": "fireeyeminer.node:Miner"
+        },
+        "minemeld_prototypes": {
+            "fireeyeminer.prototypes": "fireeyeminer:prototypes"
+        }
+    },
+    "manifest_version": 0
+}
