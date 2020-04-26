@@ -1,0 +1,36 @@
+url: api.isightpartners.com
+description: >
+  Fireeye iSight extension for MineMeld.
+
+prototypes:
+  isightMiner:
+    author: Mohamad Ali Khairi
+    class: fireeyeminer.Miner
+    development_status: EXPERIMENTAL
+    node_type: miner
+    indicator_types:
+      - ip
+      - url
+      - domain
+      - sha256
+    tags:
+      - extension
+      - fireeyeminer
+    description: >
+      Mine Fireeye iSight IOCs
+    config:
+      # set API Key
+      public_key: '<place a valid Public Key here>'
+      private_key: '<place a valid Private Key here>'
+      numdays: '<place number of days i.e: 7 or 30>'
+      # source name used in the indicators
+      source_name: api.isightpartners.com
+      # age out of indicators
+      # disabled, removed when they disappear from the channel
+      age_out:
+        sudden_death: true
+        default: null
+      # flag indicators with share level green
+      attributes:
+        share_level: green
+        confidence : 100
