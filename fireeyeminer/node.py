@@ -50,6 +50,7 @@ class Miner(BasePollerFT):
         data = json.loads(response.read())
         conn.close()
         indicators = indicators.split(',')
+        iocs = []
         for indicator in indicators:
             for message in data['message']:
                 if message[indicator]:
@@ -57,7 +58,8 @@ class Miner(BasePollerFT):
                         value = {'type': 'IPv4', 'confidence': 100}
                     else:
                         value = {'type': indicator, 'confidence': 100}
-                    return [[str(message[indicator]), value]]
-
+                    iocs.append([str(message[indicator]), value])
+        return iocs
+    
     def _process_item(self, item):
         return item
