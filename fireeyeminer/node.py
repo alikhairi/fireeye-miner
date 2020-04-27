@@ -46,7 +46,7 @@ class Miner(BasePollerFT):
                 value = {'type': ioc, 'confidence': 100}
             return [[iocs[ioc], value]]
 
-    def _build_iterator(self, now):
+    def _build_iterator(self, item):
         start = int(time.time()) - (86400 * self.numdays)
         end = int(time.time())
         indicators = 'ip,sha256,url,domain'
