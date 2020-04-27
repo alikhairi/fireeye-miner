@@ -17,15 +17,19 @@ class Miner(BasePollerFT):
         
         self.polling_timeout = self.config.get('polling_timeout', 20)
         self.verify_cert = self.config.get('verify_cert', True)
+        
         self.public_key = self.config.get('public_key', None)
         if self.public_key is None:
             raise ValueError('%s - Public Key is required' % self.name)
+        
         self.private_key = self.config.get('private_key', None)
         if self.private_key is None:
             raise ValueError('%s - Private Key is required' % self.name)
+        
         self.numdays = self.config.get('numdays', None)
         if self.numdays is None:
             raise ValueError('%s - # of Days is required' % self.name)
+        
         self.url = 'api.isightpartners.com'
         self.indicators = 'ip,sha256,url,domain'
 
@@ -50,7 +54,8 @@ class Miner(BasePollerFT):
             return [[iocs[ioc], value]]
 '''
         value = {'type': 'IPv4', 'confidence': 100}
-        return [[iocs['ip'], value]]
+        indicator = ioc['ip']
+        return [[indicator, value]]
         
         
     def _build_iterator(self, item):
