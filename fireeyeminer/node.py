@@ -33,7 +33,7 @@ class Miner(BasePollerFT):
         indicators = indicators.split(',')
         iocs = {}
         for indicator in indicators:
-            for message in data['message']:
+            for message in item['message']:
                 if message[indicator]:
                     if indicator in iocs:
                         iocs[indicator].append(message[indicator])
