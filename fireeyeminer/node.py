@@ -14,6 +14,7 @@ LOG = logging.getLogger(__name__)
 class Miner(BasePollerFT):
     def configure(self):
         super(Miner, self).configure()
+        
         self.polling_timeout = self.config.get('polling_timeout', 20)
         self.verify_cert = self.config.get('verify_cert', True)
         self.public_key = self.config.get('public_key', None)
@@ -28,6 +29,7 @@ class Miner(BasePollerFT):
         self.url = 'api.isightpartners.com'
         self.indicators = 'ip,sha256,url,domain'
 
+        
     def _process_item(self, item):
         indicators = 'ip,sha256,url,domain'
         indicators = indicators.split(',')
@@ -39,13 +41,18 @@ class Miner(BasePollerFT):
                         iocs[indicator].append(message[indicator])
                     else:
                         iocs[indicator] = [message[indicator]]
+        '''
         for ioc in iocs:
             if ioc == 'ip':
                 value = {'type': 'IPv4', 'confidence': 100}
             else:
                 value = {'type': ioc, 'confidence': 100}
             return [[iocs[ioc], value]]
-
+'''
+        value = {'type': 'IPv4', 'confidence': 100}
+        return [[iocs['ip'], value]]
+        
+        
     def _build_iterator(self, item):
         start = int(time.time()) - (86400 * self.numdays)
         end = int(time.time())
