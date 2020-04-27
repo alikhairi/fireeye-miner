@@ -18,6 +18,10 @@ prototypes:
     description: >
       Mine Fireeye iSight IOCs
     config:
+      # Set API keys
+      public_key : 'Enter your Public key here'
+      private_key : 'Enter your Private key here'
+      numdays : 7
       source_name: fireeyeminer.isight
       # age out of indicators
       # disabled, removed when they disappear from the channel
