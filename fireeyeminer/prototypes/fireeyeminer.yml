@@ -9,6 +9,9 @@ prototypes:
     node_type: miner
     indicator_types:
       - IPv4
+      - domain
+      - sha256
+      - URL
     tags:
       - extension
       - fireeyeminer
@@ -16,8 +19,8 @@ prototypes:
       Mine Fireeye iSight IOCs
     config:
       # Set API keys
-      public_key : 'Enter your Public key here'
-      private_key : 'Enter your Private key here'
+      public_key : '<Enter your Public key here>'
+      private_key : '<Enter your Private key here>'
       numdays : 7
       source_name: fireeyeminer.isight
       # age out of indicators
