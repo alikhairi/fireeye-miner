@@ -13,52 +13,28 @@ LOG = logging.getLogger(__name__)
 
 class Miner(BasePollerFT):
     def configure(self):
-        super(Miner, self).configure()
-        
-        self.public_key = None
-        self.private = None
-        self.numdays = None
-        
+        super(Miner, self).configure()        
+   
         self.polling_timeout = self.config.get('polling_timeout', 20)
         self.verify_cert = self.config.get('verify_cert', True)
+        
+        self.public_key = self.config.get('public_key', None)
+        if self.public_key is None:
+            raise ValueError('%s - Public key is required' % self.name)
+        
+        self.private_key = self.config.get('private_key', None)
+        if self.private_key is None:
+            raise ValueError('%s - Private key is required' % self.name)
+
+        self.numdays = self.config.get('numdays', None)
+        if self.numdays is None:
+            raise ValueError('%s - Number of days is required' % self.name)
+        
         self.url = 'api.isightpartners.com'
         self.indicators = 'ip,sha256,url,domain'
         
-        self.side_config_path = self.config.get('side_config', None)
-        if self.side_config_path is None:
-            self.side_config_path = os.path.join(
-                os.environ['MM_CONFIG_DIR'],
-                '%s_side_config.yml' % self.name
-            )        
-        
-        self._load_side_config()
-        
-        
-    def _load_side_config(self):
-        try:
-            with open(self.side_config_path, 'r') as f:
-                sconfig = yaml.safe_load(f)
-
-        except Exception as e:
-            LOG.error('%s - Error loading side config: %s', self.name, str(e))
-            return
-
-        self.public_key = sconfig.get('public_key', None)
-        if self.public_key is not None:
-            LOG.info('%s - Public key set', self.name)
-
-        self.private_key = sconfig.get('private_key', None)
-        if self.private_key is not None:
-            LOG.info('%s - Private key set', self.name)
-        
-        self.numdays = sconfig.get('numdays', None)
-        if self.numdays is not None:
-            LOG.info('%s - number of day set', self.name)            
-         
-
    def _process_item(self, item):
-        indicators = 'ip,sha256,url,domain'
-        indicators = indicators.split(',')
+        indicators = self.indicators.split(',')
         iocs = {}
         for indicator in indicators:
             for message in item['message']:
@@ -78,8 +54,7 @@ class Miner(BasePollerFT):
     def _build_iterator(self, item):
         start = int(time.time()) - (86400 * self.numdays)
         end = int(time.time())
-        indicators = 'ip,sha256,url,domain'
-        search_query = '/view/iocs?startDate=' + str(start) + '&endDate=' + str(end) + '&indicatorTypes=' + indicators
+        search_query = '/view/iocs?startDate=' + str(start) + '&endDate=' + str(end) + '&indicatorTypes=' + self.indicators
         accept_version = '2.2'
         accept_header = 'application/json'
         time_stamp = email.Utils.formatdate(localtime=True)
@@ -92,7 +67,7 @@ class Miner(BasePollerFT):
             'X-Auth-Hash': hashed.hexdigest(),
             'Date': time_stamp,
         }
-        conn = httplib.HTTPSConnection('api.isightpartners.com')
+        conn = httplib.HTTPSConnection(self.url)
         conn.request('GET', search_query, '', headers)
         response = conn.getresponse()
         data = json.loads(response.read())
