@@ -32,3 +32,4 @@ prototypes:
       # flag indicators with share level green
       attributes:
         share_level: green
+        confidence: 100
