@@ -9,9 +9,6 @@ prototypes:
     node_type: miner
     indicator_types:
       - IPv4
-      - domain
-      - sha256
-      - URL
     tags:
       - extension
       - fireeyeminer
