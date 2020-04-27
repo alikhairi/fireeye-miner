@@ -56,8 +56,7 @@ class Miner(BasePollerFT):
             LOG.info('%s - number of day set', self.name)            
          
 
-        
-    def _process_item(self, item):
+   def _process_item(self, item):
         indicators = 'ip,sha256,url,domain'
         indicators = indicators.split(',')
         iocs = {}
