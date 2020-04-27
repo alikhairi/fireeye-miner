@@ -28,6 +28,18 @@ class Miner(BasePollerFT):
         self.url = 'api.isightpartners.com'
         self.indicators = 'ip,sha256,url,domain'
 
+    def _process_item(self, item):
+        indicators = 'ip,sha256,url,domain'
+        indicators = indicators.split(',')
+        for indicator in indicators:
+            for x in item:
+                if x[indicator]:
+                    if indicator == 'ip':
+                        value = {'type': 'IPv4', 'confidence': 100}
+                    else:
+                        value = {'type': indicator, 'confidence': 100}
+                    return [[x[indicator], value]]
+
     def _build_iterator(self, now):
         start = int(time.time()) - (86400 * self.numdays)
         end = int(time.time())
@@ -51,15 +63,3 @@ class Miner(BasePollerFT):
         data = json.loads(response.read())
         conn.close()
         return data["message"]
-
-    def _process_item(self, item):
-        indicators = 'ip,sha256,url,domain'
-        indicators = indicators.split(',')
-        for indicator in indicators:
-            for x in item:
-                if x[indicator]:
-                    if indicator == 'ip':
-                        value = {'type': 'IPv4', 'confidence': 100}
-                    else:
-                        value = {'type': indicator, 'confidence': 100}
-                    return [[x[indicator], value]]
