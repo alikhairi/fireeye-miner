@@ -54,7 +54,7 @@ class Miner(BasePollerFT):
             return [[iocs[ioc], value]]
 '''
         value = {'type': 'IPv4', 'confidence': 100}
-        indicator = ioc['ip']
+        indicator = iocs['ip']
         return [[indicator, value]]
         
         
