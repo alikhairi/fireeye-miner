@@ -34,19 +34,6 @@ class Miner(BasePollerFT):
         self.indicators = 'ip,sha256,url,domain'
 
 
-def _process_item(self, item):
-    '''
-    for ioc in item:
-        if ioc == 'ip':
-            value = {'type': 'IPv4', 'confidence': 100}
-        else:
-            value = {'type': ioc, 'confidence': 100}
-        return [[iocs[ioc], value]]
-    '''
-    value = {'type': 'IPv4', 'confidence': 100}
-    return [[item, value]]
-
-
 def _build_iterator(self, item):
     start = int(time.time()) - (86400 * self.numdays)
     end = int(time.time())
@@ -81,3 +68,8 @@ def _build_iterator(self, item):
                     iocs[indicator] = [message[indicator]]
     result = iocs.get('ip')
     return result
+
+
+def _process_item(self, item):
+    value = {'type': 'IPv4', 'confidence': 100}
+    return [[item, value]]
