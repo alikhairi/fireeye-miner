@@ -45,17 +45,12 @@ class Miner(BasePollerFT):
                         iocs[indicator].append(message[indicator])
                     else:
                         iocs[indicator] = [message[indicator]]
-        '''
         for ioc in iocs:
             if ioc == 'ip':
                 value = {'type': 'IPv4', 'confidence': 100}
             else:
                 value = {'type': ioc, 'confidence': 100}
             return [[iocs[ioc], value]]
-'''
-        value = {'type': 'IPv4', 'confidence': 100}
-        indicator = iocs['ip']
-        return [[indicator, value]]
         
         
     def _build_iterator(self, item):
