@@ -31,14 +31,20 @@ class Miner(BasePollerFT):
     def _process_item(self, item):
         indicators = 'ip,sha256,url,domain'
         indicators = indicators.split(',')
+        iocs = {}
         for indicator in indicators:
-            for x in item:
-                if x[indicator]:
-                    if indicator == 'ip':
-                        value = {'type': 'IPv4', 'confidence': 100}
+            for message in data['message']:
+                if message[indicator]:
+                    if indicator in iocs:
+                        iocs[indicator].append(message[indicator])
                     else:
-                        value = {'type': indicator, 'confidence': 100}
-                    return [[x[indicator], value]]
+                        iocs[indicator] = [message[indicator]]
+        for ioc in iocs:
+            if ioc == 'ip':
+                value = {'type': 'IPv4', 'confidence': 100}
+            else:
+                value = {'type': ioc, 'confidence': 100}
+            return [[iocs[ioc], value]]
 
     def _build_iterator(self, now):
         start = int(time.time()) - (86400 * self.numdays)
@@ -62,4 +68,4 @@ class Miner(BasePollerFT):
         response = conn.getresponse()
         data = json.loads(response.read())
         conn.close()
-        return data["message"]
+        return data
