@@ -37,8 +37,7 @@ class Miner(BasePollerFT):
     def _build_iterator(self, item):
         start = int(time.time()) - (86400 * self.numdays)
         end = int(time.time())
-        indicators = 'ip,sha256,url,domain'
-        search_query = '/view/iocs?startDate=' + str(start) + '&endDate=' + str(end) + '&indicatorTypes=' + indicators
+        search_query = '/view/iocs?startDate=' + str(start) + '&endDate=' + str(end) + '&indicatorTypes=' + self.indicators
         accept_version = '2.2'
         accept_header = 'application/json'
         time_stamp = email.Utils.formatdate(localtime=True)
@@ -51,13 +50,12 @@ class Miner(BasePollerFT):
             'X-Auth-Hash': hashed.hexdigest(),
             'Date': time_stamp,
         }
-        conn = httplib.HTTPSConnection('api.isightpartners.com')
+        conn = httplib.HTTPSConnection(self.url)
         conn.request('GET', search_query, '', headers)
         response = conn.getresponse()
         data = json.loads(response.read())
         conn.close()
-        indicators = 'ip,sha256,url,domain'
-        indicators = indicators.split(',')
+        indicators = self.indicators.split(',')
         iocs = {}
         for indicator in indicators:
             for message in data['message']:
