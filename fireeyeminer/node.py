@@ -26,7 +26,7 @@ class Miner(BasePollerFT):
         if self.numdays is None:
             raise ValueError('%s - # of Days is required' % self.name)
         self.url = 'api.isightpartners.com'
-        self.indicators = 'ip,sha256,url,domain' 
+        self.indicators = 'ip,sha256,url,domain'
 
     def _build_iterator(self, now):
         start = int(time.time()) - (86400 * self.numdays)
@@ -51,7 +51,7 @@ class Miner(BasePollerFT):
         data = json.loads(response.read())
         conn.close()
         return data["message"]
-        
+
     def _process_item(self, item):
         indicators = 'ip,sha256,url,domain'
         indicators = indicators.split(',')
