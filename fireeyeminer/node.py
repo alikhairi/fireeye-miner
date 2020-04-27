@@ -63,7 +63,7 @@ class Miner(BasePollerFT):
             'X-Auth-Hash': hashed.hexdigest(),
             'Date': time_stamp,
         }
-        conn = httplib.HTTPSConnection(self.url)
+        conn = httplib.HTTPSConnection('api.isightpartners.com')
         conn.request('GET', search_query, '', headers)
         response = conn.getresponse()
         data = json.loads(response.read())
