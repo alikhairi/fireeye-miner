@@ -34,42 +34,42 @@ class Miner(BasePollerFT):
         self.indicators = 'ip,sha256,url,domain'
 
 
-def _build_iterator(self, item):
-    start = int(time.time()) - (86400 * self.numdays)
-    end = int(time.time())
-    indicators = 'ip,sha256,url,domain'
-    search_query = '/view/iocs?startDate=' + str(start) + '&endDate=' + str(end) + '&indicatorTypes=' + indicators
-    accept_version = '2.2'
-    accept_header = 'application/json'
-    time_stamp = email.Utils.formatdate(localtime=True)
-    hash_data = search_query + accept_version + accept_header + time_stamp
-    hashed = hmac.new(self.private_key, hash_data, hashlib.sha256)
-    headers = {
-        'Accept': accept_header,
-        'Accept-Version': accept_version,
-        'X-Auth': self.public_key,
-        'X-Auth-Hash': hashed.hexdigest(),
-        'Date': time_stamp,
-    }
-    conn = httplib.HTTPSConnection('api.isightpartners.com')
-    conn.request('GET', search_query, '', headers)
-    response = conn.getresponse()
-    data = json.loads(response.read())
-    conn.close()
-    indicators = 'ip,sha256,url,domain'
-    indicators = indicators.split(',')
-    iocs = {}
-    for indicator in indicators:
-        for message in data['message']:
-            if message[indicator]:
-                if indicator in iocs:
-                    iocs[indicator].append(message[indicator])
-                else:
-                    iocs[indicator] = [message[indicator]]
-    result = iocs.get('ip')
-    return result
-
-
-def _process_item(self, item):
-    value = {'type': 'IPv4', 'confidence': 100}
-    return [[item, value]]
+    def _build_iterator(self, item):
+        start = int(time.time()) - (86400 * self.numdays)
+        end = int(time.time())
+        indicators = 'ip,sha256,url,domain'
+        search_query = '/view/iocs?startDate=' + str(start) + '&endDate=' + str(end) + '&indicatorTypes=' + indicators
+        accept_version = '2.2'
+        accept_header = 'application/json'
+        time_stamp = email.Utils.formatdate(localtime=True)
+        hash_data = search_query + accept_version + accept_header + time_stamp
+        hashed = hmac.new(self.private_key, hash_data, hashlib.sha256)
+        headers = {
+            'Accept': accept_header,
+            'Accept-Version': accept_version,
+            'X-Auth': self.public_key,
+            'X-Auth-Hash': hashed.hexdigest(),
+            'Date': time_stamp,
+        }
+        conn = httplib.HTTPSConnection('api.isightpartners.com')
+        conn.request('GET', search_query, '', headers)
+        response = conn.getresponse()
+        data = json.loads(response.read())
+        conn.close()
+        indicators = 'ip,sha256,url,domain'
+        indicators = indicators.split(',')
+        iocs = {}
+        for indicator in indicators:
+            for message in data['message']:
+                if message[indicator]:
+                    if indicator in iocs:
+                        iocs[indicator].append(message[indicator])
+                    else:
+                        iocs[indicator] = [message[indicator]]
+        result = iocs.get('ip')
+        return result
+    
+    
+    def _process_item(self, item):
+        value = {'type': 'IPv4', 'confidence': 100}
+        return [[item, value]]
