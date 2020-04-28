@@ -5,10 +5,17 @@ import hmac
 import httplib
 import email
 import time
+import netaddr
+import netaddr.core
+import re
 
 from minemeld.ft.basepoller import BasePollerFT
 
 LOG = logging.getLogger(__name__)
+
+DOMAIN_RE = re.compile('^[a-zA-Z\d-]{,63}(\.[a-zA-Z\d-]{,63})*$')
+SHA256_RE = re.compile('[A-Fa-f0-9]{64}')
+MD5_RE = re.compile('[a-fA-F0-9]{32}')
 
 
 class Miner(BasePollerFT):
@@ -31,7 +38,7 @@ class Miner(BasePollerFT):
             raise ValueError('%s - Number of days is required' % self.name)
 
         self.url = 'api.isightpartners.com'
-        self.indicators = 'ip,sha256,url,domain'
+        self.indicators = 'ip,url,domain,sha256,md5'
 
 
     def _build_iterator(self, item):
@@ -56,18 +63,80 @@ class Miner(BasePollerFT):
         data = json.loads(response.read())
         conn.close()
         indicators = self.indicators.split(',')
-        iocs = {}
+        iocs = []
         for indicator in indicators:
             for message in data['message']:
                 if message[indicator]:
-                    if indicator in iocs:
-                        iocs[indicator].append(message[indicator])
-                    else:
-                        iocs[indicator] = [message[indicator]]
-        result = iocs.get('ip')
-        return result
+                    iocs.append(message[indicator])
+        return iocs
     
     
     def _process_item(self, item):
-        value = {'type': 'IPv4', 'confidence': 100}
-        return [[item, value]]
+        indicator = item
+
+        result = {}
+        result['type'] = self._type_of_indicator(indicator)
+        return [[indicator, result]]
+
+    def _check_for_ip(self, indicator):
+        if '-' in indicator:
+            # check for address range
+            a1, a2 = indicator.split('-', 1)
+
+            try:
+                a1 = netaddr.IPAddress(a1)
+                a2 = netaddr.IPAddress(a2)
+
+                if a1.version == a2.version:
+                    if a1.version == 6:
+                        return 'IPv6'
+                    if a1.version == 4:
+                        return 'IPv4'
+
+            except:
+                return None
+
+            return None
+
+        if '/' in indicator:
+            # check for network
+            try:
+                ip = netaddr.IPNetwork(indicator)
+
+            except:
+                return None
+
+            if ip.version == 4:
+                return 'IPv4'
+            if ip.version == 6:
+                return 'IPv6'
+
+            return None
+
+        try:
+            ip = netaddr.IPAddress(indicator)
+        except:
+            return None
+
+        if ip.version == 4:
+            return 'IPv4'
+        if ip.version == 6:
+            return 'IPv6'
+
+        return None
+
+    def _type_of_indicator(self, indicator):
+        ipversion = self._check_for_ip(indicator)
+        if ipversion is not None:
+            return ipversion
+
+        if DOMAIN_RE.match(indicator):
+            return 'domain'
+        
+        if SHA256_RE.match(indicator):
+            return 'sha256'
+                
+        if MD5_RE.match(indicator):
+            return 'md5'
+
+        return 'URL'
