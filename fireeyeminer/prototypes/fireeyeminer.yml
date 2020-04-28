@@ -5,13 +5,14 @@ prototypes:
   isight:
     author: Mohamad Ali Khairi
     class: fireeyeminer.Miner
-    development_status: EXPERIMENTAL
+    development_status: STABLE
     node_type: miner
     indicator_types:
       - IPv4
       - domain
       - sha256
       - URL
+      - md5
     tags:
       - extension
       - fireeyeminer
