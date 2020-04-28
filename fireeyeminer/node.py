@@ -129,7 +129,7 @@ class Miner(BasePollerFT):
         ipversion = self._check_for_ip(indicator)
         if ipversion is not None:
             return ipversion
-
+        
         if DOMAIN_RE.match(indicator):
             return 'domain'
         
@@ -138,5 +138,5 @@ class Miner(BasePollerFT):
         
         if MD5_RE.match(indicator):
             return 'md5'
-                
+        
         return 'URL'
