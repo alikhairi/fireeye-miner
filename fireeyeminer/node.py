@@ -128,15 +128,12 @@ class Miner(BasePollerFT):
     def _type_of_indicator(self, indicator):
         ipversion = self._check_for_ip(indicator)
         if ipversion is not None:
-            return ipversion
-        
-        if DOMAIN_RE.match(indicator):
-            return 'domain'
-        
-        if SHA256_RE.match(indicator):
+            return ipversion        
+        elif MD5_RE.match(indicator):
+            return 'md5'       
+        elif SHA256_RE.match(indicator):
             return 'sha256'
-        
-        if MD5_RE.match(indicator):
-            return 'md5'
-        
-        return 'URL'
+        elif DOMAIN_RE.match(indicator):
+            return 'domain'
+        else:
+            return 'URL'
