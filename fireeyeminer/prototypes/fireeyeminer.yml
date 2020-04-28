@@ -12,7 +12,6 @@ prototypes:
       - domain
       - sha256
       - URL
-      - md5
     tags:
       - extension
       - fireeyeminer
