@@ -14,7 +14,8 @@ from minemeld.ft.basepoller import BasePollerFT
 LOG = logging.getLogger(__name__)
 
 DOMAIN_RE = re.compile('^[a-zA-Z\d-]{,63}(\.[a-zA-Z\d-]{,63})*$')
-SHA256_RE = re.compile('[A-Fa-f0-9]{64}')
+SHA256_RE = re.compile('^[A-Fa-f0-9]{64}$')
+MD5_RE = re.compile('^[A-Fa-f0-9]{64}$')
 
 
 class Miner(BasePollerFT):
@@ -37,7 +38,7 @@ class Miner(BasePollerFT):
             raise ValueError('%s - Number of days is required' % self.name)
 
         self.url = 'api.isightpartners.com'
-        self.indicators = 'ip,url,domain,sha256'
+        self.indicators = 'ip,url,domain,sha256,md5'
 
 
     def _build_iterator(self, item):
@@ -134,5 +135,8 @@ class Miner(BasePollerFT):
         
         if SHA256_RE.match(indicator):
             return 'sha256'
+        
+        if MD5_RE.match(indicator):
+            return 'md5'
                 
         return 'URL'
