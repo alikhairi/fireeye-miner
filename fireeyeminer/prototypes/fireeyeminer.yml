@@ -17,7 +17,7 @@ prototypes:
       - extension
       - fireeyeminer
     description: >
-      Mine Fireeye iSight IOCs
+      Miner for Fireeye iSight IOCs
     config:
       # Set API keys
       public_key : '<Enter your Public key here>'
